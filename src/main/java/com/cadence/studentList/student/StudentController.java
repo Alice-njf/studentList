@@ -24,9 +24,14 @@ public class StudentController {
 						Gender.MALE	),
 				
 				new Student (
-						1L,
+						2L,
 						"Test2 name",
 						"test2@gmail.com",
+						Gender.FEMALE	),
+				new Student (
+						3L,
+						"Test3 name",
+						"test3@gmail.com",
 						Gender.FEMALE	)
 				);
 		return students;
