@@ -5,13 +5,14 @@ import { Button } from 'antd';
 import {getAllStudents} from './client';
 import {useState, useEffect} from 'react';
 
-import { Layout, Menu, Breadcrumb, Table } from 'antd';
+import { Layout, Menu, Breadcrumb, Table, Spin, Empty } from 'antd';
 import {
     DesktopOutlined,
     PieChartOutlined,
     FileOutlined,
     TeamOutlined,
     UserOutlined,
+    LoadingOutlined
 } from '@ant-design/icons';
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -38,11 +39,20 @@ const columns = [
     key: 'gender',
   },
 ];
+const antIcon = (
+  <LoadingOutlined
+    style={{
+      fontSize: 24,
+    }}
+    spin
+  />
+);
 
 
 function App() {
 	const [students, setStudents] = useState ([]);
 	const [collapsed, setCollapsed] = useState(false);
+	const [fetching, setFetching] = useState(false);
 	
 	const fetchStudents = () => 
 		getAllStudents()
@@ -59,8 +69,11 @@ function App() {
 	);
 	
 	const renderStudents = () => {
+		if(fetching){
+			return <Spin indicator={antIcon} />
+		}
 		if(students.length <= 0){
-			return "!!!Sno data available"
+			return <Empty />
 		}
 		if(students.length ==2){
 		return students.map((student, index) => {
@@ -68,7 +81,8 @@ function App() {
 		})
 		}
 		return <Table dataSource={students} columns={columns}
-		bordered title = {()=> 'Students'} />
+		bordered title = {()=> 'Students'} pagination ={{pageSize:50}} 
+		scroll={{y:240}} rowKey = {(student) => student.id}/>
 	}
 	
   return <Layout style={{ minHeight: '100vh' }}>
@@ -107,7 +121,7 @@ function App() {
                     {renderStudents()}
                 </div>
             </Content>
-            <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+            <Footer style={{ textAlign: 'center' }}>By Cadence IT</Footer>
         </Layout>
     </Layout>
 }

@@ -1,0 +1,84 @@
+step 1. Delete .git folder manually present in your frontend folder.
+step 2. type "git rm --cached YourFrontendFolderName" in cmd
+step 3. type "git add YourFrontendFolderName" in cmd
+step 4. type "git push " in cmd
+------------------
+Docker:
+<plugin>
+	<groupId>com.google.cloud.tools</groupId>
+	<artifactId>jib-maven-plugin</artifactId>
+	<version>2.5.2</version>
+	<configuration>
+		<from>
+			<image>openjdk:15</image>
+		</from>
+		<container>
+			<ports>
+				<port>8080</port>
+			</ports>
+			<format>OCI</format>
+		</container>
+	</configuration>
+</plugin>
+--
+If -Djib.to.image=fullstack:v1 does not work try -Dimage=fullstack:v1
+
+Mac
+- ./mvnw compile jib:dockerBuild -Djib.to.image=fullstack:v1 or ./mvnw compile jib:dockerBuild -Dimage=fullstack:v1
+- ./mvnw clean install jib:dockerBuild -Djib.to.image=fullstack:v1 or ./mvnw clean install jib:dockerBuild -Dimage=fullstack:v1
+
+
+Windows
+- mvnw compile jib:dockerBuild -Djib.to.image=fullstack:v1 or mvnw compile jib:dockerBuild -Dimage=fullstack:v1
+- mvnw clean install jib:dockerBuild -Djib.to.image=fullstack:v1 or mvnw clean install jib:dockerBuild -Dimage=fullstack:v1
+
+To run container
+- docker run --name fullstack -p 8080:8080 fullstack:v1
+
+To delete container with name fullstack
+- docker rm -f fullstack 
+
+To view local images run
+- docker image ls or docker images
+
+To view running containers
+- docker ps 
+--
+build img docker hub:
+Commands used: 
+docker login 
+sudo ./mvnw clean install jib:build -Djib.to.image=alicenjf/spring-react-fullstack:latest
+
+
+docker pull docker rm -f id ./mvnw clean install jib:build -Djib.to.image=amigoscode/spring-react-fullstack:latest ./mvnw clean install jib:build -Djib.to.image=amigoscode/spring-react-fullstack:latest -D jib.to.auth.username=amigoscode -Djib.to.auth.password=yourpassword docker pull amigoscode/spring-react-fullstack:latest docker run -p 8080:8080 amigoscode/spring-react-fullstack
+
+after ading profiles in pom.xml
+sudo ./mvnw clean install -P build-frontend -P jib-push-to-dockerhub -Dapp.image.tag=2
+
+-- DB
+1 - create a folder to mount /var/lib/postgresql/data
+2 - cd into that folder
+3 - 
+MAC LINUX Users
+docker run --name db -p 5432:5432 --network=db -v "$PWD:/var/lib/postgresql/data" -e POSTGRES_PASSWORD=password -d postgres:alpine
+
+WINDOWS Users
+docker run --name db -p 5432:5432 --network=db -v "%cd%:/var/lib/postgresql/data" -e POSTGRES_PASSWORD=password -d postgres:alpine
+
+sudo docker network create db
+cd studentList-db-data/
+sudo docker run --name db -p 5432:5432 --network=db -v "$PWD:/var/lib/postgresql/data" -e POSTGRESPASSWORD=password -d postgres:alpine
+
+
+docker run -it --rm --network=db postgres:alpine psql -h db -U postgres
+
+in application.properties:
+spring.datasource.url=jdbc:postgresql://localhost:5432/amigoscode
+spring.datasource.username=
+spring.datasource.password=
+spring.jpa.hibernate.ddl-auto=create-drop
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.properties.hibernate.format_sql=true
+
+s
