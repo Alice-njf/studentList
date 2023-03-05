@@ -4,6 +4,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -13,16 +16,13 @@ public class StudentController {
 	
 	@GetMapping
 	public List<Student> getAllStudent() {
-		System.out.println("test");
-	
 		
 		List<Student> students = Arrays.asList(
 				new Student (
 						1L,
 						"Test1 name",
 						"test1@gmail.com",
-						Gender.MALE	),
-				
+						Gender.MALE	),			
 				new Student (
 						2L,
 						"Test2 name",
