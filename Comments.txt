@@ -3,7 +3,7 @@ step 2. type "git rm --cached YourFrontendFolderName" in cmd
 step 3. type "git add YourFrontendFolderName" in cmd
 step 4. type "git push " in cmd
 ------------------
-Docker:
+Docker: Install postgress running on docker:
 <plugin>
 	<groupId>com.google.cloud.tools</groupId>
 	<artifactId>jib-maven-plugin</artifactId>
@@ -71,8 +71,14 @@ docker run --name db -p 5432:5432 --network=db -v "$PWD:/var/lib/postgresql/data
 WINDOWS Users
 docker run --name db -p 5432:5432 --network=db -v "%cd%:/var/lib/postgresql/data" -e POSTGRES_PASSWORD=password -d postgres:alpine
 
+docker run --user 1000 --name db -p 5432:5432 --network=db -v "$PWD:/var/lib/postgresql/data" -e POSTGRES_PASSWORD=password -d postgres:alpine
 
+docker run --user 1000 --name dbb -p 5432:5432 --network=dbb -v "$PWD:/var/lib/postgresql/data" -e POSTGRES_PASSWORD=password -d postgres  
 
+another container:
+docker run --user 1000 -it --rm --network=dbb postgres:latest psql -h dbb -U postgres
+------------
+Properties:
 
 in application.properties:
 spring.datasource.url=jdbc:postgresql://localhost:5432/amigoscode
@@ -83,4 +89,7 @@ spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
 spring.jpa.properties.hibernate.format_sql=true
 
+-------
+Random data generater:
+https://www.mockaroo.com/
 s
