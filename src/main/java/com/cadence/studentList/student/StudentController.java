@@ -2,6 +2,8 @@ package com.cadence.studentList.student;
 
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,5 +42,9 @@ public class StudentController {
 				);
 		return students;*/
 	}
-
+	
+	@PostMapping
+	public void addStudent(@RequestBody Student student) {
+		studentService.addStudent(student);
+	}
 }

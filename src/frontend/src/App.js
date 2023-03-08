@@ -1,23 +1,46 @@
 import logo from './logo.svg';
 import './App.css';
 import React from 'react';
-import { Button } from 'antd';
 import {getAllStudents} from './client';
 import {useState, useEffect} from 'react';
+import type { SizeType } from 'antd/es/config-provider/SizeContext';
+import StudentDrawerForm from './StudentDrawerForm';
 
-import { Layout, Menu, Breadcrumb, Table, Spin, Empty } from 'antd';
+import { Layout, Menu, Breadcrumb, Table, Spin, Empty, Button, Badge,Tag, Avatar} from 'antd';
 import {
     DesktopOutlined,
     PieChartOutlined,
     FileOutlined,
     TeamOutlined,
     UserOutlined,
-    LoadingOutlined
+    LoadingOutlined,
+    PlusOutlined
 } from '@ant-design/icons';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu; 
+const TheAvatar = ({name}) => {
+	let trim = name.trim();
+	let idx = name.indexOf(' ');
+	if(trim.length === 0) {
+		return <Avatar icon={<UserOutlined/>}/>
+	}
+	const split = trim.split(" ");
+	if (split.length === 1) {
+		return <Avatar>{name.charAt(0)}</Avatar>
+	}
+	return <Avatar> 
+		{`${name.charAt(0)}${name.charAt(idx+1)}`} 
+	</Avatar>
+}
 const columns = [
+  {
+    title: '',
+    dataIndex: 'avatar',
+    key: 'avatar',
+    render: (text, student) => 
+    	 <TheAvatar name={student.name}/> 
+  },
   {
     title: 'Id',
     dataIndex: 'id',
@@ -53,6 +76,7 @@ function App() {
 	const [students, setStudents] = useState ([]);
 	const [collapsed, setCollapsed] = useState(false);
 	const [fetching, setFetching] = useState(false);
+	const [showDrawer, setShowDrawer] = useState(false);
 	
 	const fetchStudents = () => 
 		getAllStudents()
@@ -75,14 +99,31 @@ function App() {
 		if(students.length <= 0){
 			return <Empty />
 		}
-		if(students.length ==2){
-		return students.map((student, index) => {
-			return <p>{student.id}</p>
-		})
-		}
-		return <Table dataSource={students} columns={columns}
-		bordered title = {()=> 'Students'} pagination ={{pageSize:50}} 
-		scroll={{y:500}} rowKey = {(student) => student.id}/>
+		return <>
+			<StudentDrawerForm
+          		showDrawer={showDrawer}
+            	setShowDrawer={setShowDrawer}
+            	fetchStudents={fetchStudents}
+          	/>
+			<Table dataSource={students} columns={columns}
+				bordered           
+				title = {()=> 
+					<>
+			        	<small className = "stNo" > Number of students </small>
+						<Badge count={students.length} className="site-badge-count-4"/>
+			     		<br/><br/>
+			     		<Button 
+			     			value="small"
+							onClick={() => setShowDrawer(!showDrawer)}
+							type="primary" shape="round" icon={<PlusOutlined />} size="32px">
+				             Add New Student  
+			        	</Button>
+			     	</>
+			     }
+			     pagination ={{pageSize:50}} 
+				 scroll={{y:500}} rowKey = {(student) => student.id}
+			/>
+		</>
 	}
 	
   return <Layout style={{ minHeight: '100vh' }}>
@@ -96,9 +137,9 @@ function App() {
                 <Menu.Item key="2" icon={<DesktopOutlined />}>
                     Option 2
                 </Menu.Item>
-                <SubMenu key="sub1" icon={<UserOutlined />} title="User">
+                <SubMenu key="sub1" icon={<UserOutlined />} title="Student">
                     <Menu.Item key="3">Tom</Menu.Item>
-                    <Menu.Item key="4">Bill</Menu.Item>
+                    <Menu.Item key="4">List</Menu.Item>
                     <Menu.Item key="5">Alex</Menu.Item>
                 </SubMenu>
                 <SubMenu key="sub2" icon={<TeamOutlined />} title="Team">
@@ -114,8 +155,8 @@ function App() {
             <Header className="site-layout-background" style={{ padding: 0 }} />
             <Content style={{ margin: '0 16px' }}>
                 <Breadcrumb style={{ margin: '16px 0' }}>
-                    <Breadcrumb.Item>User</Breadcrumb.Item>
-                    <Breadcrumb.Item>Bill</Breadcrumb.Item>
+                    <Breadcrumb.Item>Student</Breadcrumb.Item>
+                    <Breadcrumb.Item>List</Breadcrumb.Item>
                 </Breadcrumb>
                 <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
                     {renderStudents()}
