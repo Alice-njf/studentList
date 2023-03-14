@@ -92,4 +92,12 @@ spring.jpa.properties.hibernate.format_sql=true
 -------
 Random data generater:
 https://www.mockaroo.com/
+--
+add PostMapping: new Body/raw/JSON
+Test with postman:
+    {
+        "name": "Alice",
+        "gender": "FEMALE",
+        "email": "Alice@gmail.com"
+    }
 s
