@@ -23,8 +23,8 @@ public class StudentController {
 
 	@GetMapping
 	public List<Student> getAllStudent() {
-		throw new IllegalStateException("oops");
-		//return studentService.getAllStudent();
+		//throw new IllegalStateException("oops");
+		return studentService.getAllStudent();
 		/*System.out.println("getAllStudent");
 		List<Student> students = Arrays.asList(
 				new Student (

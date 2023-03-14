@@ -4,7 +4,6 @@ import React from 'react';
 import {getAllStudents} from './client';
 import {deleteStudent} from './client';
 import {useState, useEffect} from 'react';
-import type { SizeType } from 'antd/es/config-provider/SizeContext';
 import StudentDrawerForm from './StudentDrawerForm';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { Popconfirm } from 'antd';
@@ -112,8 +111,16 @@ function App() {
 		.then(data => {
 			console.log(students);
 			setStudents(data);
-			setFetching(false);
-		})
+		}).catch(err =>{
+			console.log(err.response);
+			err.response.json().then(data=> {
+			console.log(data);
+			errorNotification(
+				"There was an issue", 
+				`${data.message} [status code:${data.status}] [path:${data.path}] [error:${data.error}]`
+			);
+			});
+		}).finally(() => setFetching(false));
 		
 	useEffect(() => {
 		fetchStudents();
