@@ -41,7 +41,16 @@ const removeStudent = (studentId, callback) => {
     deleteStudent(studentId).then(() => {
         successNotification( "Student deleted", `Student with ${studentId} was deleted`);
         callback();
-    });
+    }).catch(err=>
+    	err.response.json.then(res=> {
+			errorNotification(
+				"There is an issue",
+				`${res.message} [${res.status}] [${res.error}]`
+			);
+		}
+    	)
+		
+	);
 }
 
 const columns = fetchStudents => [
@@ -133,7 +142,18 @@ function App() {
 			return <Spin indicator={antIcon} />
 		}
 		if(students.length <= 0){
-			return <Empty />
+			return <>
+			<Empty /> 
+			<Button onClick={() => setShowDrawer(!showDrawer)}
+			type="primary" shape="round" icon={<PlusOutlined />} size="32px">
+				Add new Student
+			</Button>
+			<StudentDrawerForm
+          		showDrawer={showDrawer}
+            	setShowDrawer={setShowDrawer}
+            	fetchStudents={fetchStudents}
+          	/>
+			</>
 		}
 		return <>
 			<StudentDrawerForm
