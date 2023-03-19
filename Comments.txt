@@ -100,4 +100,34 @@ Test with postman:
         "gender": "FEMALE",
         "email": "Alice@gmail.com"
     }
-s
+----------
+add:
+		<dependency> 
+    		<groupId>org.springframework.boot</groupId> 
+    		<artifactId>spring-boot-starter-validation</artifactId> 
+		</dependency>
+		
+Create db in AWS
+create another properties-dev and add the AWS db endpoint , username and password
+create a new application variable (variable spring.profiles.active = dev) for eclips and run in
+in cmd line run:
+docker run --user 1000 -it --rm postgres:latest psql -h awseb-e-2wzajwfpmu-stack-awsebrdsdatabase-ifxsmbkqketm.c9zk8h9syyry.eu-central-1.rds.amazonaws.com -U alicenjf -d postgres
+it will fail because we are not allowed by sg so:
+In AWS add security group to allow us to connect to DB
+docker run --user 1000 -it --rm postgres:latest psql -h awseb-e-2wzajwfpmu-stack-awsebrdsdatabase-ifxsmbkqketm.c9zk8h9syyry.eu-central-1.rds.amazonaws.com -U alicenjf -d postgres
+it will ask for ur pass: 34UjhG09
+now is connected and can modify.
+
+then delete the inbound rule from everywhere
+then delete variable spring.profiles.active = dev
+-----------
+stop frontend and backend
+Now we can push a new version to dockerhub and implement in AWS:
+go to the app folder
+login to docker
+sudo ./mvnw clean install -P build-frontend -P jib-push-to-dockerhub -Dapp.image.tag=5
+
+add tis to docker_compose.yml:
+    environment: 
+    	SPRING_PROFILES_ACTIVE: dev
+

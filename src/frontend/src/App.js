@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+import logo from './images/logo.png';
 import './App.css';
 import React from 'react';
 import {getAllStudents} from './client';
@@ -9,7 +9,7 @@ import { QuestionCircleOutlined } from '@ant-design/icons';
 import { Popconfirm } from 'antd';
 import {errorNotification, successNotification} from "./Notification";
 import { Layout, Menu, Breadcrumb, Table, Spin, Empty, Button, Badge,Tag,
-Avatar,Radio} from 'antd';
+Avatar,Radio, Image} from 'antd';
 import {
     DesktopOutlined,
     PieChartOutlined,
@@ -220,7 +220,14 @@ function App() {
                     {renderStudents()}
                 </div>
             </Content>
-            <Footer style={{ textAlign: 'center' }}>By Cadence IT</Footer>
+            <Footer style={{ textAlign: 'center' }}>
+            <Image 
+            width={35}
+            src={logo}
+            />
+            <br/>
+            By Cadence IT
+            </Footer>
         </Layout>
     </Layout>
 }
