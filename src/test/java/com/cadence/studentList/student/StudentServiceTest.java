@@ -7,6 +7,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -37,8 +38,21 @@ class StudentServiceTest {
 
 	@Test
 	@Disabled
-	void testAddStudent() {
-		fail("Not yet implemented");
+	void canAddStudent() {
+		//To check if the student we pass to repository is same student it saves
+		// given
+		Student student = new Student(
+				"Jhon Lee", 
+				"lee@gmail.com", Gender.MALE);
+		
+		// when
+		underTest.addStudent(student);
+		
+		// then
+		ArgumentCaptor<Student> studentArgumentCaptor =
+				ArgumentCaptor.forClass(Student.class);
+		
+		verify(studentRepository).save(studentArgumentCaptor.capture());
 	}
 
 	@Test
